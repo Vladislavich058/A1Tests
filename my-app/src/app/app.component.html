@@ -1,5 +1,38 @@
-<h1 class="text-3xl font-bold underline text-center">{{title | titlecase}}</h1>
+<div class="max-w-fit my-0 mx-auto box-content p-5">
+<div class="container mx-auto pt-5">
 
-<app-user
-[user] = "users[0]"
-></app-user>
+<h1 class="text-3xl font-bold text-center mb-10 ">Postings</h1>
+<table class="table-auto border-collapse text-center ">
+    <thead class="border-b font-medium dark:border-zinc-500">
+        <tr>
+            <th class="py-6 px-4">Posting №</th>
+            <th class="py-6 px-4">Item</th>
+            <th class="py-6 px-4">Doc date</th>
+            <th class="py-6 px-4">Posting date</th>
+            <th class="py-6 px-4">Material description</th>
+            <th class="py-6 px-4">Quantity</th>
+            <th class="py-6 px-4">BUn</th>
+            <th class="py-6 px-4">Ammount LC</th>
+            <th class="py-6 px-4">Currency</th>
+            <th class="py-6 px-4">User name</th>
+            <th class="py-6 px-4">Authorised delivery</th>
+        </tr>
+    </thead>
+    <tbody class="">
+        <tr *ngFor="let posting of postings" class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-zinc-500 dark:hover:bg-zinc-300">
+            <td class="p-4">{{ posting.matDoc }}</td>
+            <td class="p-4">{{ posting.item }}</td>
+            <td class="p-4">{{ posting.docDate }}</td>
+            <td class="p-4">{{ posting.postingDate }}</td>
+            <td class="p-4">{{ posting.materialDescription }}</td>
+            <td class="p-4">{{ posting.quantity }}</td>
+            <td class="p-4">{{ posting.bun }}</td>
+            <td class="p-4">{{ posting.amountLC }}</td>
+            <td class="p-4">{{ posting.crcy }}</td>
+            <td class="p-4">{{ posting.userName }}</td>
+            <td class="p-4">{{ posting.authorizedDelivery }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
