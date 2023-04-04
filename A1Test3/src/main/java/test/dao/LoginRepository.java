@@ -11,6 +11,7 @@ import test.domain.Login;
 
 public interface LoginRepository 
 		extends CrudRepository<Login, Long> {
+	
 	Optional<Login> findByAppAccountName(String appAccountName);
 	
 	@Transactional

@@ -22,26 +22,26 @@ public class Posting {
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Long id;
 
-	long matDoc;
+	private long matDoc;
 	
-	long item;
+	private long item;
 	
-	LocalDate docDate;
+	private LocalDate docDate;
 	
-	LocalDate postingDate;
+	private LocalDate postingDate;
 	
-	String materialDescription;
+	private String materialDescription;
 	
-	long quantity;
+	private long quantity;
 	
-	String bUn;
+	private String bUn;
 	
-	double amountLC;
+	private double amountLC;
 	
-	String crcy;
+	private String crcy;
 	
-	String userName;
+	private String userName;
 	
-	boolean authorizedDelivery;
+	private boolean authorizedDelivery;
 	
 }

@@ -20,17 +20,17 @@ public class Login {
 	private Long id;
 	
 	@NonNull
-	String application;
+	private String application;
 	
 	@NonNull
-	String appAccountName;
+	private String appAccountName;
 	
 	@NonNull
-	Boolean isActive;
+	private Boolean isActive;
 	
 	@NonNull
-	String jobTitle;
+	private String jobTitle;
 	
 	@NonNull
-	String department;
+	private String department;
 }
