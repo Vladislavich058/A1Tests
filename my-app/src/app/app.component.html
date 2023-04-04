@@ -1,38 +1,221 @@
-<div class="max-w-fit my-0 mx-auto box-content p-5">
-<div class="container mx-auto pt-5">
+<app-global-error></app-global-error>
 
-<h1 class="text-3xl font-bold text-center mb-10 ">Postings</h1>
-<table class="table-auto border-collapse text-center ">
-    <thead class="border-b font-medium dark:border-zinc-500">
-        <tr>
-            <th class="py-6 px-4">Posting №</th>
-            <th class="py-6 px-4">Item</th>
-            <th class="py-6 px-4">Doc date</th>
-            <th class="py-6 px-4">Posting date</th>
-            <th class="py-6 px-4">Material description</th>
-            <th class="py-6 px-4">Quantity</th>
-            <th class="py-6 px-4">BUn</th>
-            <th class="py-6 px-4">Ammount LC</th>
-            <th class="py-6 px-4">Currency</th>
-            <th class="py-6 px-4">User name</th>
-            <th class="py-6 px-4">Authorised delivery</th>
-        </tr>
-    </thead>
-    <tbody class="">
-        <tr *ngFor="let posting of postings" class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-zinc-500 dark:hover:bg-zinc-300">
-            <td class="p-4">{{ posting.matDoc }}</td>
-            <td class="p-4">{{ posting.item }}</td>
-            <td class="p-4">{{ posting.docDate }}</td>
-            <td class="p-4">{{ posting.postingDate }}</td>
-            <td class="p-4">{{ posting.materialDescription }}</td>
-            <td class="p-4">{{ posting.quantity }}</td>
-            <td class="p-4">{{ posting.bun }}</td>
-            <td class="p-4">{{ posting.amountLC }}</td>
-            <td class="p-4">{{ posting.crcy }}</td>
-            <td class="p-4">{{ posting.userName }}</td>
-            <td class="p-4">{{ posting.authorizedDelivery }}</td>
-        </tr>
-    </tbody>
-</table>
-</div>
+<div class="max-w-fit my-0 mx-auto box-content p-5">
+    <div class="container mx-auto pt-5">
+
+    <h1 class="text-3xl font-bold text-center mb-10 ">Postings</h1>
+    <div class="flex">
+        <ul>
+            <li>
+                <button 
+                    (click)="filterByDay=true;
+                        filterByMonth=false;
+                        filterByQuarter=false;
+                        filterByYear=false;
+                        filter=false"
+                    class="mb-3 border px-5 py-1 border-stone-950 rounded hover:scale-110 transition .3s ease-out"
+                >Filter by day</button>
+            </li>
+            <li>
+                <button
+                (click)="filterByDay=false;
+                    filterByMonth=true;
+                    filterByQuarter=false;
+                    filterByYear=false;
+                    filter=false"
+                class="mb-3 border px-5 py-1 border-stone-950 rounded hover:scale-110 transition .3s ease-out"
+                >Filter by month</button>
+            </li>
+            <li>
+                <button
+                (click)="filterByDay=false;
+                    filterByMonth=false;
+                    filterByQuarter=true;
+                    filterByYear=false;
+                    filter=false"
+                class="mb-3 border px-5 py-1 border-stone-950 rounded hover:scale-110 transition .3s ease-out"
+                >Filter by quarter</button>
+            </li>
+            <li>
+                <button
+                (click)="filterByDay=false;
+                    filterByMonth=false;
+                    filterByQuarter=false;
+                    filterByYear=true;
+                    filter=false"
+                class="mb-3 border px-5 py-1 border-stone-950 rounded hover:scale-110 transition .3s ease-out"
+                >Filter by year</button>
+            </li>
+            <li>
+                <button 
+                (click)="postings$=service.getAll(); 
+                        form.date='';
+                        filterByDay=false;
+                        filterByMonth=false;
+                        filterByQuarter=false;
+                        filterByYear=false;
+                        filter=false"
+                class="mr-5 border px-5 py-1 border-stone-950 rounded hover:scale-110 transition .3s ease-out"
+                >Reset
+                </button>
+            </li>
+        </ul>
+        <div *ngIf="filterByDay" class="ml-5 border border-zinc-950 rounded-lg w-fit h-fit p-5">
+            <form (ngSubmit)="postings$=service.getByDocDate(form.date, filter)" #dateForm="ngForm">
+                <div class="form-group">
+                    <label class="font-bold" for="date">Input day</label><br>
+                    <input type="date" id="date"
+                        class="bg-zinc-100"
+                        required
+                        [(ngModel)]="form.date" name="date"
+                        #date="ngModel"/><br>
+                    <div [hidden]="date.valid"
+                        class="text-red-500">
+                    Date is required
+                    </div>
+                    <label class="font-bold" for="authorizedDelivery">Authorized Delivery</label>
+                    <input type="checkbox" id="authorizedDelivery"
+                        class="ml-3"
+                        [(ngModel)]="filter" name="authorizedDelivery"/>
+                </div>
+                <button 
+                        class="font-bold underline default:hover:text-zinc-600 disabled:font-normal disabled:text-zinc-300"
+                        type="submit" 
+                        [disabled]="!dateForm.form.valid"
+                    >Submit</button>
+            </form>
+        </div>
+        <div *ngIf="filterByMonth" class="ml-5 border border-zinc-950 rounded-lg w-fit h-fit p-5">
+            <form (ngSubmit)="postings$=service.getByMonth(form.month, form.year, filter)" #dateForm="ngForm">
+                <div class="form-group">
+                    <label class="font-bold" for="month">Input month</label><br>
+                    <input type="number" id="month" min="1" max="12"
+                        class="bg-zinc-100 border-b-2 px-2 outline-none"
+                        required
+                        [(ngModel)]="form.month" name="month"
+                        #month="ngModel"/><br>
+                    <div [hidden]="month.valid"
+                        class="text-red-500">
+                        Month is required
+                    </div>
+                    <label class="font-bold" for="year">Input year</label><br>
+                    <input type="number" id="year" min="1970" max="2100"
+                        class="bg-zinc-100 border-b-2 px-2 outline-none"
+                        required
+                        [(ngModel)]="form.year" name="year"
+                        #year="ngModel"/><br>
+                    <div [hidden]="year.valid"
+                        class="text-red-500">
+                        Year is required
+                    </div>
+                    <label class="font-bold" for="authorizedDelivery">Authorized Delivery</label>
+                    <input type="checkbox" id="authorizedDelivery"
+                        class="ml-3"
+                        [(ngModel)]="filter" name="authorizedDelivery"/>
+                </div>
+                <button 
+                        class="font-bold underline default:hover:text-zinc-600 disabled:font-normal disabled:text-zinc-300"
+                        type="submit" 
+                        [disabled]="!dateForm.form.valid"
+                    >Submit</button>
+            </form>
+        </div>
+        <div *ngIf="filterByQuarter" class="ml-5 border border-zinc-950 rounded-lg w-fit h-fit p-5">
+            <form (ngSubmit)="postings$=service.getByQuarter(form.quarter, form.year, filter)" #dateForm="ngForm">
+                <div class="form-group">
+                    <label class="font-bold" for="quarter">Input quarter</label><br>
+                    <input type="number" id="quarter" min="1" max="4"
+                        class="bg-zinc-100 border-b-2 px-2 outline-none"
+                        required
+                        [(ngModel)]="form.quarter" name="quarter"
+                        #quarter="ngModel"/><br>
+                    <div [hidden]="quarter.valid"
+                        class="text-red-500">
+                        Quarter is required
+                    </div>
+                    <label class="font-bold" for="year">Input year</label><br>
+                    <input type="number" id="year" min="1970" max="2100"
+                        class="bg-zinc-100 border-b-2 px-2 outline-none"
+                        required
+                        [(ngModel)]="form.year" name="year"
+                        #year="ngModel"/><br>
+                    <div [hidden]="year.valid"
+                        class="text-red-500">
+                        Year is required
+                    </div>
+                    <label class="font-bold" for="authorizedDelivery">Authorized Delivery</label>
+                    <input type="checkbox" id="authorizedDelivery"
+                        class="ml-3"
+                        [(ngModel)]="filter" name="authorizedDelivery"/>
+                </div>
+                <button 
+                        class="font-bold underline default:hover:text-zinc-600 disabled:font-normal disabled:text-zinc-300"
+                        type="submit" 
+                        [disabled]="!dateForm.form.valid"
+                    >Submit</button>
+            </form>
+        </div>
+        <div *ngIf="filterByYear" class="ml-5 border border-zinc-950 rounded-lg w-fit h-fit p-5">
+            <form (ngSubmit)="postings$=service.getByYear(form.year, filter)" #dateForm="ngForm">
+                <div class="form-group">
+                    <label class="font-bold" for="year">Input year</label><br>
+                    <input type="number" id="year" min="1970" max="2100"
+                        class="bg-zinc-100 border-b-2 px-2 outline-none"
+                        required
+                        [(ngModel)]="form.year" name="year"
+                        #year="ngModel"/><br>
+                    <div [hidden]="year.valid"
+                        class="text-red-500">
+                        Year is required
+                    </div>
+                    <label class="font-bold" for="authorizedDelivery">Authorized Delivery</label>
+                    <input type="checkbox" id="authorizedDelivery"
+                        class="ml-3"
+                        [(ngModel)]="filter" name="authorizedDelivery"/>
+                </div>
+                <button 
+                        class="font-bold underline default:hover:text-zinc-600 disabled:font-normal disabled:text-zinc-300"
+                        type="submit" 
+                        [disabled]="!dateForm.form.valid"
+                    >Submit</button>
+            </form>
+        </div>
+    </div>
+    <p *ngIf="loading" class="text-center text-lg">Loading...</p>
+    <table class="table-auto border-collapse text-center ">
+        <thead class="border-b font-medium border-zinc-400 dark:border-zinc-500">
+            <tr>
+                <th class="py-6 px-4">Posting №</th>
+                <th class="py-6 px-4">Item</th>
+                <th class="py-6 px-4">Doc date</th>
+                <th class="py-6 px-4">Posting date</th>
+                <th class="py-6 px-4">Material description</th>
+                <th class="py-6 px-4">Quantity</th>
+                <th class="py-6 px-4">BUn</th>
+                <th class="py-6 px-4">Ammount LC</th>
+                <th class="py-6 px-4">Currency</th>
+                <th class="py-6 px-4">User name</th>
+                <th class="py-6 px-4">Authorised delivery</th>
+            </tr>
+        </thead>
+        <tbody class="">
+            <tr *ngFor="let posting of postings$ | async" class="border-b transition duration-300 ease-in-out border-zinc-400 hover:bg-zinc-300 dark:border-zinc-500 dark:hover:bg-zinc-300">
+                <td class="p-4">{{ posting.matDoc }}</td>
+                <td class="p-4">{{ posting.item }}</td>
+                <td class="p-4">{{ posting.docDate }}</td>
+                <td class="p-4">{{ posting.postingDate }}</td>
+                <td class="p-4">{{ posting.materialDescription }}</td>
+                <td class="p-4">{{ posting.quantity }}</td>
+                <td class="p-4">{{ posting.bun }}</td>
+                <td class="p-4">{{ posting.amountLC | number: ".2" }}</td>
+                <td class="p-4">{{ posting.crcy }}</td>
+                <td class="p-4">{{ posting.userName }}</td>
+                <td class="p-4">{{ posting.authorizedDelivery==true ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="!(postings$ | async)?.length" class="text-red-500 text-3xl">
+        No data
+    </div>
+    </div>
 </div>
